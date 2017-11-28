@@ -1,0 +1,6 @@
+[package]
+name = "generic-queue"
+version = "0.1.0"
+authors = ["You <you@example.com>"]
+
+[dependencies]

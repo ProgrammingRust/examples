@@ -1,0 +1,7 @@
+[package]
+name = "libgit2-rs"
+version = "0.1.0"
+authors = ["You <you@example.com>"]
+build = "build.rs"
+
+[dependencies]

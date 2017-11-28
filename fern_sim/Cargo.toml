@@ -1,0 +1,13 @@
+[package]
+name = "fern_sim"
+version = "0.1.0"
+authors = ["You <you@example.com>"]
+license = "MIT"
+homepage = "https://fernsim.example.com/"
+repository = "https://git.example.com/fernsim"
+documentation = "http://fernsim.example.com/docs"
+description = """
+Fern simulation, from the cellular level up.
+"""
+
+[dependencies]
