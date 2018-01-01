@@ -7,6 +7,9 @@ Each subdirectory is a distinct Rust project, with its own Cargo.toml file. You
 should be able to enter each directory and use `cargo build` and `cargo test`.
 For those projects that define programs, `cargo run` should run them.
 
+The example code in this directory and its subdirectories is licensed under the
+terms of the MIT license. See [LICENSE-MIT](LICENSE-MIT) for details.
+
 ## Chapter 2: A Tour of Rust
 
 - The `gcd` directory holds the command-line program for computing the greatest
