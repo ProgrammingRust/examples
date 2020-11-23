@@ -7,7 +7,7 @@ fn http_get_main(url: &str) -> Result<(), Box<dyn Error>> {
     // Send the HTTP request and get a response.
     let mut response = reqwest::get(url)?;
     if !response.status().is_success() {
-        Err(format!("{}", response.status()))?;
+        return Err(format!("{}", response.status()).into());
     }
 
     // Read the response body and write it to stdout.
