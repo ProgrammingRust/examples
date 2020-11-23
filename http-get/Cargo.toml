@@ -4,4 +4,4 @@ version = "0.1.0"
 authors = ["You <you@example.com>"]
 
 [dependencies]
-reqwest = "0.5.1"
+reqwest = "0.9"

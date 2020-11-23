@@ -1,9 +1,9 @@
 extern crate reqwest;
 
 use std::error::Error;
-use std::io::{self, Write};
+use std::io;
 
-fn http_get_main(url: &str) -> Result<(), Box<Error>> {
+fn http_get_main(url: &str) -> Result<(), Box<dyn Error>> {
     // Send the HTTP request and get a response.
     let mut response = reqwest::get(url)?;
     if !response.status().is_success() {
@@ -20,11 +20,11 @@ fn http_get_main(url: &str) -> Result<(), Box<Error>> {
 fn main() {
     let args: Vec<String> = std::env::args().collect();
     if args.len() != 2 {
-        writeln!(io::stderr(), "usage: http-get URL").unwrap();
+        eprintln!("usage: http-get URL");
         return;
     }
 
     if let Err(err) = http_get_main(&args[1]) {
-        writeln!(io::stderr(), "error: {}", err).unwrap();
+        eprintln!("error: {}", err);
     }
 }
