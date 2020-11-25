@@ -68,7 +68,7 @@ fn good_ascii() {
 
     // This call entails no allocation or text copies, just a scan.
     let ascii: Ascii = Ascii::from_bytes(bytes)
-        .unwrap(); // We know these chosen bytes are legit.
+        .unwrap(); // We know these chosen bytes are ok.
 
     // This call is zero-cost: no allocation, copies, or scans.
     let string = String::from(ascii);
