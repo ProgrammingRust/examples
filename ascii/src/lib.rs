@@ -1,6 +1,4 @@
 mod my_ascii {
-    use std::ascii::AsciiExt; // for u8::is_ascii
-
     /// An ASCII-encoded string.
     #[derive(Debug, Eq, PartialEq)]
     pub struct Ascii(
@@ -82,6 +80,7 @@ fn good_ascii() {
 #[test]
 fn bad_ascii() {
     use self::my_ascii::Ascii;
+    use std::convert::TryFrom;
 
     // Imagine that this vector is the result of some complicated process
     // that we expected to produce ASCII. Something went wrong!
@@ -97,5 +96,5 @@ fn bad_ascii() {
 
     // `bogus` now holds ill-formed UTF-8. Parsing its first character
     // produces a `char` that is not a valid Unicode code point.
-    assert_eq!(bogus.chars().next().unwrap() as u32, 0x1fffff);
+    assert_eq!(bogus.chars().next().unwrap() as u32, u32::from(0x1fffff).unwrap());
 }
