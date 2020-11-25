@@ -93,7 +93,9 @@ fn bad_ascii() {
 
     let bogus: String = ascii.into();
 
-    // `bogus` now holds ill-formed UTF-8. Parsing its first character
-    // produces a `char` that is not a valid Unicode code point.
-    assert_eq!(bogus.chars().next().unwrap() as u32, 0x1fffff);
+    // `bogus` now holds ill-formed UTF-8. Parsing its first character produces
+    // a `char` that is not a valid Unicode code point. That's undefined
+    // behavior, so we can't really say what this assertion will do. It could
+    // pass, fail, crash, do nothing at all, etc.
+    assert_eq!(bogus.chars().next().unwrap() as u32, 0x1fffff_u32);
 }
