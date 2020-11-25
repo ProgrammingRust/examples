@@ -96,5 +96,5 @@ fn bad_ascii() {
 
     // `bogus` now holds ill-formed UTF-8. Parsing its first character
     // produces a `char` that is not a valid Unicode code point.
-    assert_eq!(bogus.chars().next().unwrap() as u32, u32::from(0x1fffff).unwrap());
+    assert_eq!(bogus.chars().next().unwrap() as u32, u32::try_from(0x1fffff).unwrap());
 }
