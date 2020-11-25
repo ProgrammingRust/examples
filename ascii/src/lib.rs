@@ -1,6 +1,4 @@
 mod my_ascii {
-    use std::ascii::AsciiExt; // for u8::is_ascii
-
     /// An ASCII-encoded string.
     #[derive(Debug, Eq, PartialEq)]
     pub struct Ascii(
