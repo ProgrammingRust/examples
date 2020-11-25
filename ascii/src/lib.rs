@@ -95,7 +95,7 @@ fn bad_ascii() {
 
     // `bogus` now holds ill-formed UTF-8. Parsing its first character produces
     // a `char` that is not a valid Unicode code point. That's undefined
-    // behavior, so we can't really say what this assertion will do. It could
-    // pass, fail, crash, do nothing at all, etc.
+    // behavior, so the language doesn't say how this assertion should behave.
+    // It could pass, fail, crash, do nothing at all, etc.
     assert_eq!(bogus.chars().next().unwrap() as u32, 0x1fffff_u32);
 }
