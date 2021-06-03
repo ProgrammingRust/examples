@@ -75,7 +75,7 @@ use std;
 use libc;
 
 fn ensure_initialized() {
-    static ONCE: std::sync::Once = std::sync::ONCE_INIT;
+    static ONCE: std::sync::Once = std::sync::Once::new();
     ONCE.call_once(|| {
         unsafe {
             check(raw::git_libgit2_init())
