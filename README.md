@@ -15,8 +15,8 @@ terms of the MIT license. See [LICENSE-MIT](LICENSE-MIT) for details.
 - The `gcd` directory holds the command-line program for computing the greatest
   common denominator of a list of numbers.
 
-- The `iron-gcd` directory holds the code for the simple web service,
-  implemented using the [`iron`] framework, that computes greatest common
+- The `actix-gcd` directory holds the code for the simple web service,
+  implemented using the [`actix-web`] framework, that computes greatest common
   denominators.
 
 - The Mandelbrot plotting program has its own repository, at
