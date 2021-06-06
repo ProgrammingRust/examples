@@ -15,7 +15,7 @@ struct Response {
     body: Vec<u8>
 }
 
-type BoxedCallback = Box<Fn(&Request) -> Response>;
+type BoxedCallback = Box<dyn Fn(&Request) -> Response>;
 
 struct BasicRouter {
     routes: HashMap<String, BoxedCallback>
@@ -34,6 +34,7 @@ impl BasicRouter {
         self.routes.insert(url.to_string(), Box::new(callback));
     }
 }
+
 
 impl BasicRouter {
     fn handle_request(&self, request: &Request) -> Response {
