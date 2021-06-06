@@ -29,14 +29,8 @@ mod my_ascii {
         fn from(ascii: Ascii) -> String {
             // If this module has no bugs, this is safe, because
             // well-formed ASCII text is also well-formed UTF-8.
-            unsafe {
-                String::from_utf8_unchecked(ascii.0)
-            }
+            unsafe { String::from_utf8_unchecked(ascii.0) }
         }
-    }
-
-    impl From<Ascii> for Vec<u8> {
-        fn from(ascii: Ascii) -> Vec<u8> { ascii.0 }
     }
 
     // This must be placed inside the `my_ascii` module.
@@ -59,10 +53,9 @@ mod my_ascii {
     }
 }
 
-
 #[test]
 fn good_ascii() {
-    use self::my_ascii::Ascii;
+    use my_ascii::Ascii;
 
     let bytes: Vec<u8> = b"ASCII and ye shall receive".to_vec();
 
@@ -79,7 +72,7 @@ fn good_ascii() {
 
 #[test]
 fn bad_ascii() {
-    use self::my_ascii::Ascii;
+    use my_ascii::Ascii;
 
     // Imagine that this vector is the result of some complicated process
     // that we expected to produce ASCII. Something went wrong!
@@ -96,6 +89,5 @@ fn bad_ascii() {
     // `bogus` now holds ill-formed UTF-8. Parsing its first character produces
     // a `char` that is not a valid Unicode code point. That's undefined
     // behavior, so the language doesn't say how this assertion should behave.
-    // It could pass, fail, crash, do nothing at all, etc.
-    assert_eq!(bogus.chars().next().unwrap() as u32, 0x1fffff_u32);
+    assert_eq!(bogus.chars().next().unwrap() as u32, 0x1fffff);
 }
