@@ -1,18 +1,16 @@
 #![allow(dead_code)]
 
-extern crate rand;
-
 // An ordered collection of `T`s.
 enum BinaryTree<T> {
     Empty,
-    NonEmpty(Box<TreeNode<T>>)
+    NonEmpty(Box<TreeNode<T>>),
 }
 
 // A part of a BinaryTree.
 struct TreeNode<T> {
     element: T,
     left: BinaryTree<T>,
-    right: BinaryTree<T>
+    right: BinaryTree<T>,
 }
 
 #[test]
@@ -26,37 +24,42 @@ fn binary_tree_size() {
 }
 
 #[test]
-fn test_hand_building_tree_of_planets() {
+fn build_binary_tree() {
     use self::BinaryTree::*;
     let jupiter_tree = NonEmpty(Box::new(TreeNode {
         element: "Jupiter",
         left: Empty,
-        right: Empty
+        right: Empty,
     }));
+
     let mercury_tree = NonEmpty(Box::new(TreeNode {
         element: "Mercury",
         left: Empty,
-        right: Empty
+        right: Empty,
     }));
+
     let mars_tree = NonEmpty(Box::new(TreeNode {
         element: "Mars",
         left: jupiter_tree,
-        right: mercury_tree
+        right: mercury_tree,
     }));
+
     let venus_tree = NonEmpty(Box::new(TreeNode {
         element: "Venus",
         left: Empty,
-        right: Empty
+        right: Empty,
     }));
+
     let uranus_tree = NonEmpty(Box::new(TreeNode {
         element: "Uranus",
         left: Empty,
-        right: venus_tree
+        right: venus_tree,
     }));
+
     let tree = NonEmpty(Box::new(TreeNode {
         element: "Saturn",
         left: mars_tree,
-        right: uranus_tree
+        right: uranus_tree,
     }));
 
     assert_eq!(tree.walk(),
@@ -80,18 +83,20 @@ impl<T: Clone> BinaryTree<T> {
 impl<T: Ord> BinaryTree<T> {
     fn add(&mut self, value: T) {
         match *self {
-            BinaryTree::Empty =>
+            BinaryTree::Empty => {
                 *self = BinaryTree::NonEmpty(Box::new(TreeNode {
                     element: value,
                     left: BinaryTree::Empty,
-                    right: BinaryTree::Empty
-                })),
-            BinaryTree::NonEmpty(ref mut node) =>
+                    right: BinaryTree::Empty,
+                }))
+            }
+            BinaryTree::NonEmpty(ref mut node) => {
                 if value <= node.element {
                     node.left.add(value);
                 } else {
                     node.right.add(value);
                 }
+            }
         }
     }
 }
@@ -113,18 +118,22 @@ fn test_add_method_2() {
     let mut tree = BinaryTree::Empty;
     tree.add("Mercury");
     tree.add("Venus");
-    for planet in vec!["Mars", "Jupiter", "Saturn", "Uranus"]  {
+    for planet in vec!["Mars", "Jupiter", "Saturn", "Uranus"] {
         tree.add(planet);
     }
 
-    assert_eq!(tree.walk(),
-               vec!["Jupiter", "Mars", "Mercury", "Saturn", "Uranus", "Venus"]);
+    assert_eq!(
+        tree.walk(),
+        vec!["Jupiter", "Mars", "Mercury", "Saturn", "Uranus", "Venus"]
+    );
 }
+
+// From chapter 15: Iterators
 
 use self::BinaryTree::*;
 
 // The state of an in-order traversal of a `BinaryTree`.
-struct TreeIter<'a, T: 'a> {
+struct TreeIter<'a, T> {
     // A stack of references to tree nodes. Since we use `Vec`'s
     // `push` and `pop` methods, the top of the stack is the end of the
     // vector.
@@ -164,14 +173,13 @@ impl<'a, T> Iterator for TreeIter<'a, T> {
     type Item = &'a T;
     fn next(&mut self) -> Option<&'a T> {
         // Find the node this iteration must produce,
-        // or finish the iteration.
-        let node = match self.unvisited.pop() {
-            None => return None,
-            Some(n) => n
-        };
+        // or finish the iteration. (Use the `?` operator
+        // to return immediately if it's `None`.)
+        let node = self.unvisited.pop()?;
 
-        // The next node after this one is the leftmost child of
-        // this node's right child, so push the path from here down.
+        // After `node`, the next thing we produce must be the leftmost
+        // child in `node`'s right subtree, so push the path from here
+        // down. Our helper method turns out to be just what we need.
         self.push_left_edge(&node.right);
 
         // Produce a reference to this node's value.
@@ -188,24 +196,40 @@ fn external_iterator() {
     }
 
     // Build a small tree.
-    let subtree_l = make_node(Empty, "mecha", Empty);
-    let subtree_rl = make_node(Empty, "droid", Empty);
-    let subtree_r = make_node(subtree_rl, "robot", Empty);
-    let tree = make_node(subtree_l, "Jaeger", subtree_r);
+    let mut tree = BinaryTree::Empty;
+    tree.add("jaeger");
+    tree.add("robot");
+    tree.add("droid");
+    tree.add("mecha");
 
     // Iterate over it.
     let mut v = Vec::new();
     for kind in &tree {
         v.push(*kind);
     }
-    assert_eq!(v, ["mecha", "Jaeger", "droid", "robot"]);
+    assert_eq!(v, ["droid", "jaeger", "mecha", "robot"]);
 
+    assert_eq!(tree.iter()
+               .map(|name| format!("mega-{}", name))
+               .collect::<Vec<_>>(),
+               vec!["mega-droid", "mega-jaeger",
+                    "mega-mecha", "mega-robot"]);
+
+    let mut iterator = (&tree).into_iter();
+    assert_eq!(iterator.next(), Some(&"droid"));
+    assert_eq!(iterator.next(), Some(&"jaeger"));
+    assert_eq!(iterator.next(), Some(&"mecha"));
+    assert_eq!(iterator.next(), Some(&"robot"));
+    assert_eq!(iterator.next(), None);
+
+    // Construct a tree by hand.
     let left_subtree = make_node(Empty, "mecha", Empty);
     let right_subtree = make_node(make_node(Empty, "droid", Empty),
                                   "robot",
                                   Empty);
     let tree = make_node(left_subtree, "Jaeger", right_subtree);
 
+    // Try initializing the iterator ourselves and see if it runs.
     let mut v = Vec::new();
     let mut iter = TreeIter { unvisited: vec![] };
     iter.push_left_edge(&tree);
@@ -214,32 +238,22 @@ fn external_iterator() {
     }
     assert_eq!(v, ["mecha", "Jaeger", "droid", "robot"]);
 
+    // Iterate by shared reference.
     let mut v = Vec::new();
     for kind in &tree {
         v.push(*kind);
     }
     assert_eq!(v, ["mecha", "Jaeger", "droid", "robot"]);
 
+    // Iterate, taking ownership.
     let mut v = Vec::new();
     let mut state = tree.into_iter();
     while let Some(kind) = state.next() {
         v.push(*kind);
     }
     assert_eq!(v, ["mecha", "Jaeger", "droid", "robot"]);
-
-    assert_eq!(tree.iter()
-               .map(|name| format!("mega-{}", name))
-               .collect::<Vec<_>>(),
-               vec!["mega-mecha", "mega-Jaeger",
-                    "mega-droid", "mega-robot"]);
-
-    let mut iterator = tree.into_iter();
-    assert_eq!(iterator.next(), Some(&"mecha"));
-    assert_eq!(iterator.next(), Some(&"Jaeger"));
-    assert_eq!(iterator.next(), Some(&"droid"));
-    assert_eq!(iterator.next(), Some(&"robot"));
-    assert_eq!(iterator.next(), None);
 }
+
 
 #[test]
 fn other_cloned() {
@@ -257,13 +271,12 @@ fn other_cloned() {
 #[test]
 fn fuzz() {
     fn make_random_tree(p: f32) -> BinaryTree<i32> {
-        use rand::{ThreadRng, thread_rng};
-        use rand::distributions::range::Range;
-        use rand::distributions::Sample;
+        use rand::prelude::*;
+        use rand::thread_rng;
+        use rand::rngs::ThreadRng;
 
         fn make(p: f32, next: &mut i32, rng: &mut ThreadRng) -> BinaryTree<i32> {
-            let mut range = Range::new(0.0, 1.0);
-            if range.sample(rng) > p {
+            if rng.gen_range(0.0 .. 1.0) > p {
                 Empty
             } else {
                 let left = make(p * p, next, rng);
