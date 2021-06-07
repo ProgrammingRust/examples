@@ -27,7 +27,7 @@ terms of the MIT license. See [LICENSE-MIT](LICENSE-MIT) for details.
   “Concurrency”, shows several other approaches, which appear on other branches;
   see the repository's [README.md][mandel-readme] file for details.
 
-[`iron`]: https://crates.io/crates/iron
+[`actix-web`]: https://actix.rs/
 
 ## Chapter 8: Crates and Modules
 
