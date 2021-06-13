@@ -18,7 +18,7 @@ fn grep<R>(target: &str, reader: R) -> io::Result<()>
     Ok(())
 }
 
-fn grep_main() -> Result<(), Box<Error>> {
+fn grep_main() -> Result<(), Box<dyn Error>> {
     // Get the command-line arguments. The first argument is the
     // string to search for; the rest are filenames.
     let mut args = std::env::args().skip(1);
@@ -44,6 +44,7 @@ fn grep_main() -> Result<(), Box<Error>> {
 fn main() {
     let result = grep_main();
     if let Err(err) = result {
-        let _ = writeln!(io::stderr(), "{}", err);
+        eprintln!("{}", err);
+        std::process::exit(1);
     }
 }
