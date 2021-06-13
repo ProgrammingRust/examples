@@ -1,7 +1,8 @@
+#![warn(rust_2018_idioms)]
+#![allow(elided_lifetimes_in_paths)]
 #![allow(dead_code)]
 
 mod gap {
-    use std;
     use std::ops::Range;
 
     /// A GapBuffer<T> is a sequence of elements of type `T` that can insert and
@@ -42,24 +43,24 @@ mod gap {
         }
 
         /// Return a pointer to the `index`'th element of the underlying storage,
-        /// as if the gap were not there.
+        /// regardless of the gap.
         ///
-        /// Safety: `index` must be less than self.capacity().
+        /// Safety: `index` must be a valid index into `self.storage`.
         unsafe fn space(&self, index: usize) -> *const T {
             self.storage.as_ptr().offset(index as isize)
         }
 
         /// Return a mutable pointer to the `index`'th element of the underlying
-        /// storage, as if the gap were not there.
+        /// storage, regardless of the gap.
         ///
-        /// Safety: `index` must be less than self.capacity().
+        /// Safety: `index` must be a valid index into `self.storage`.
         unsafe fn space_mut(&mut self, index: usize) -> *mut T {
             self.storage.as_mut_ptr().offset(index as isize)
         }
 
         /// Return the offset in the buffer of the `index`'th element, taking
         /// the gap into account. This does not check whether index is in range,
-        /// but it never returns the index of space in the gap.
+        /// but it never returns an index in the gap.
         fn index_to_raw(&self, index: usize) -> usize {
             if index < self.gap.start {
                 index
@@ -193,18 +194,18 @@ mod gap {
                     std::ptr::drop_in_place(self.space_mut(i));
                 }
                 for i in self.gap.end .. self.capacity() {
-                    drop(std::ptr::read(self.space(i)));
+                    std::ptr::drop_in_place(self.space_mut(i));
                 }
             }
         }
     }
 
-    pub struct Iter<'a, T: 'a> {
+    pub struct Iter<'a, T> {
         buffer: &'a GapBuffer<T>,
         pos: usize
     }
 
-    impl<'a, T: 'a> Iterator for Iter<'a, T> {
+    impl<'a, T> Iterator for Iter<'a, T> {
         type Item = &'a T;
         fn next(&mut self) -> Option<&'a T> {
             if self.pos >= self.buffer.len() {
@@ -246,7 +247,7 @@ mod gap {
 mod gap_tests {
     #[test]
     fn test() {
-        use gap::GapBuffer;
+        use super::gap::GapBuffer;
 
         let mut buf = GapBuffer::new();
         buf.insert_iter("Lord of the Rings".chars());
@@ -259,7 +260,7 @@ mod gap_tests {
 
     #[test]
     fn misc() {
-        use gap::GapBuffer;
+        use super::gap::GapBuffer;
 
         let mut gb = GapBuffer::new();
         println!("{:?}", gb);
@@ -301,7 +302,7 @@ mod gap_tests {
 
     #[test]
     fn drop_elements() {
-        use gap::GapBuffer;
+        use super::gap::GapBuffer;
 
         let mut gb = GapBuffer::new();
         gb.insert("foo".to_string());
