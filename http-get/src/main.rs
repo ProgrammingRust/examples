@@ -1,11 +1,12 @@
-extern crate reqwest;
+#![warn(rust_2018_idioms)]
+#![allow(elided_lifetimes_in_paths)]
 
 use std::error::Error;
 use std::io;
 
 fn http_get_main(url: &str) -> Result<(), Box<dyn Error>> {
     // Send the HTTP request and get a response.
-    let mut response = reqwest::get(url)?;
+    let mut response = reqwest::blocking::get(url)?;
     if !response.status().is_success() {
         Err(format!("{}", response.status()))?;
     }
