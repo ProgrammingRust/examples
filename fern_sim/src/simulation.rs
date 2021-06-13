@@ -4,7 +4,7 @@
 
 use std::fs::File;
 use std::time::Duration;
-use plant_structures::{Fern, FernType};
+use crate::plant_structures::{Fern, FernType};
 
 /// The simulated universe.
 pub struct Terrarium {

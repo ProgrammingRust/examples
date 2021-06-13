@@ -1,6 +1,8 @@
 // tests/unfurl.rs - Fiddleheads unfurl in sunlight
 
-extern crate fern_sim;
+#![warn(rust_2018_idioms)]
+#![allow(elided_lifetimes_in_paths)]
+
 use fern_sim::Terrarium;
 use std::time::Duration;
 

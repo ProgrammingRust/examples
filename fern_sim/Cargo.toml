@@ -1,6 +1,7 @@
 [package]
 name = "fern_sim"
 version = "0.1.0"
+edition = "2018"
 authors = ["You <you@example.com>"]
 license = "MIT"
 homepage = "https://fernsim.example.com/"

@@ -1,7 +1,9 @@
 //! Simulate the growth of ferns, from the level of
 //! individual cells on up.
 
-pub mod cells;
+#![warn(rust_2018_idioms)]
+#![allow(elided_lifetimes_in_paths)]
+
 pub mod plant_structures;
 pub mod simulation;
 pub mod spores;
