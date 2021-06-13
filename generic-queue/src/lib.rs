@@ -1,10 +1,13 @@
+#![warn(rust_2018_idioms)]
+#![allow(elided_lifetimes_in_paths)]
+
 pub struct Queue<T> {
     older: Vec<T>,
     younger: Vec<T>
 }
 
 impl<T> Queue<T> {
-    pub fn new() -> Queue<T> {
+    pub fn new() -> Self {
         Queue { older: Vec::new(), younger: Vec::new() }
     }
 
@@ -85,6 +88,6 @@ fn test_generic() {
     q.push("CAD");  // apparently a Queue<&'static str>
     r.push(0.74);   // apparently a Queue<f64>
 
-    q.push("BTC");  // Bitcoins per USD, 2017-5
-    r.push(2737.7); // Rust fails to detect irrational exuberance
+    q.push("BTC");   // Bitcoins per USD, 2019-6
+    r.push(13764.0); // Rust fails to detect irrational exuberance
 }
