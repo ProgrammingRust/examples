@@ -1,3 +1,6 @@
+#![warn(rust_2018_idioms)]
+#![allow(elided_lifetimes_in_paths)]
+
 mod raw;
 
 use std::ffi::CStr;
@@ -48,9 +51,12 @@ fn main() {
               raw::git_repository_open(&mut repo, path.as_ptr()));
 
         let c_name = b"HEAD\0".as_ptr() as *const c_char;
-        let mut oid = mem::uninitialized();
-        check("looking up HEAD",
-              raw::git_reference_name_to_id(&mut oid, repo, c_name));
+        let oid = {
+            let mut oid = mem::MaybeUninit::uninit();
+            check("looking up HEAD",
+                  raw::git_reference_name_to_id(oid.as_mut_ptr(), repo, c_name));
+            oid.assume_init()
+        };
 
         let mut commit = ptr::null_mut();
         check("looking up commit",

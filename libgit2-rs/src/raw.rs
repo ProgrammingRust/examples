@@ -25,8 +25,8 @@ extern {
     pub fn git_commit_free(commit: *mut git_commit);
 }
 
-pub enum git_repository {}
-pub enum git_commit {}
+#[repr(C)] pub struct git_repository { _private: [u8; 0] }
+#[repr(C)] pub struct git_commit { _private: [u8; 0] }
 
 #[repr(C)]
 pub struct git_error {
@@ -34,9 +34,11 @@ pub struct git_error {
     pub klass: c_int
 }
 
+pub const GIT_OID_RAWSZ: usize = 20;
+
 #[repr(C)]
 pub struct git_oid {
-    pub id: [c_uchar; 20]
+    pub id: [c_uchar; GIT_OID_RAWSZ]
 }
 
 pub type git_time_t = i64;
