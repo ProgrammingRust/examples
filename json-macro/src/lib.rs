@@ -1,3 +1,6 @@
+#![warn(rust_2018_idioms)]
+#![allow(elided_lifetimes_in_paths)]
+
 use std::collections::HashMap;
 
 #[macro_use] mod macros;
@@ -42,4 +45,5 @@ macro_rules! impl_from_num_for_json {
     };
 }
 
-impl_from_num_for_json!(u8 i8 u16 i16 u32 i32 u64 i64 usize isize f32 f64);
+impl_from_num_for_json!(u8 i8 u16 i16 u32 i32 u64 i64 u128 i128
+                        usize isize f32 f64);

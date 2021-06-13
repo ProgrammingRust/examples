@@ -15,8 +15,10 @@ macro_rules! json {
         {
             let mut fields = $crate::macros::Box::new(
                 $crate::macros::HashMap::new());
-            $( fields.insert($crate::macros::ToString::to_string($key),
-                             json!($value)); )*
+            $(
+                fields.insert($crate::macros::ToString::to_string($key),
+                              json!($value));
+            )*
             $crate::Json::Object(fields)
         }
     };
@@ -25,11 +27,9 @@ macro_rules! json {
     };
 }
 
-
-
 #[cfg(test)]
 mod tests {
-    use ::Json;
+    use crate::Json;
 
     #[test]
     fn json_with_rust_expressions() {
