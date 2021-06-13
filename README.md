@@ -99,12 +99,17 @@ terms of the MIT license. See [LICENSE-MIT](LICENSE-MIT) for details.
 
 [mandel-readme]: https://github.com/ProgrammingRust/mandelbrot/blob/master/README.md
 
-## Chapter 20: Macros
+## Chapter 20: Asynchronous Programming
+
+- The chat client and server used as an extended example are in their own
+  repository, at `https://github.com/ProgrammingRust/async-chat`.
+
+## Chapter 21: Macros
 
 - The `json-macro` directory holds the definition of the `json!` macro built in
   the section “The json! Macro”.
 
-## Chapter 21: Unsafe Code
+## Chapter 22: Unsafe Code
 
 - The `ascii` directory holds the `Ascii` type used as an example in the
   sections “Unsafe Blocks” and “Unsafe Functions”.
@@ -115,6 +120,8 @@ terms of the MIT license. See [LICENSE-MIT](LICENSE-MIT) for details.
 - The `gap-buffer` directory holds the `GapBuffer` type, used in the “Raw
   Pointers” section to illustrate pointer arithmetic and `std::ptr::read` and
   `std::ptr::write`.
+
+## Chapter 22: Foreign Functions
 
 - The `libgit2-rs` and `libgit2-rs-safe` directories contain the two versions of
   the program that uses Rust's foreign function interface to call functions from
