@@ -1,10 +1,11 @@
-mod git;
+#![warn(rust_2018_idioms)]
+#![allow(elided_lifetimes_in_paths)]
 
-extern crate libc;
+mod git;
 
 fn main() {
     let path = std::env::args_os().skip(1).next()
-        .expect("usage: libgit2-rs PATH");
+        .expect("usage: git-toy PATH");
 
     let repo = git::Repository::open(&path)
         .expect("opening repository");

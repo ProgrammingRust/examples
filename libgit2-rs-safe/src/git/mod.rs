@@ -18,9 +18,7 @@ impl fmt::Display for Error {
     }
 }
 
-impl error::Error for Error {
-    fn description(&self) -> &str { &self.message }
-}
+impl error::Error for Error { }
 
 pub type Result<T> = result::Result<T, Error>;
 
@@ -51,28 +49,26 @@ fn check(code: c_int) -> Result<c_int> {
 
 /// A Git repository.
 pub struct Repository {
-    // This must always be a pointer to a live `git_repository` structure,
+    // This must always be a pointer to a live `git_repository` structure.
     // No other `Repository` may point to it.
     raw: *mut raw::git_repository
 }
 
 use std::path::Path;
+use std::ptr;
 
 impl Repository {
     pub fn open<P: AsRef<Path>>(path: P) -> Result<Repository> {
         ensure_initialized();
 
         let path = path_to_cstring(path.as_ref())?;
-        let mut repo = null_mut();
+        let mut repo = ptr::null_mut();
         unsafe {
             check(raw::git_repository_open(&mut repo, path.as_ptr()))?;
         }
         Ok(Repository { raw: repo })
     }
 }
-
-use std;
-use libc;
 
 fn ensure_initialized() {
     static ONCE: std::sync::Once = std::sync::Once::new();
@@ -85,14 +81,10 @@ fn ensure_initialized() {
     });
 }
 
-use std::io::Write;
-
 extern fn shutdown() {
     unsafe {
         if let Err(e) = check(raw::git_libgit2_shutdown()) {
-            let _ = writeln!(std::io::stderr(),
-                             "shutting down libgit2 failed: {}",
-                             e);
+            eprintln!("shutting down libgit2 failed: {}", e);
             std::process::abort();
         }
     }
@@ -151,16 +143,20 @@ pub struct Oid {
     pub raw: raw::git_oid
 }
 
-use std::mem::uninitialized;
+use std::mem;
 use std::os::raw::c_char;
 
 impl Repository {
     pub fn reference_name_to_id(&self, name: &str) -> Result<Oid> {
         let name = CString::new(name)?;
         unsafe {
-            let mut oid = uninitialized();
-            check(raw::git_reference_name_to_id(&mut oid, self.raw,
-                                                name.as_ptr() as *const c_char))?;
+            let oid = {
+                let mut oid = mem::MaybeUninit::uninit();
+                check(raw::git_reference_name_to_id(
+                        oid.as_mut_ptr(), self.raw,
+                        name.as_ptr() as *const c_char))?;
+                oid.assume_init()
+            };
             Ok(Oid { raw: oid })
         }
     }
@@ -174,11 +170,9 @@ pub struct Commit<'repo> {
     _marker: PhantomData<&'repo Repository>
 }
 
-use std::ptr::null_mut;
-
 impl Repository {
     pub fn find_commit(&self, oid: &Oid) -> Result<Commit> {
-        let mut commit = null_mut();
+        let mut commit = ptr::null_mut();
         unsafe {
             check(raw::git_commit_lookup(&mut commit, self.raw, &oid.raw))?;
         }
@@ -240,7 +234,8 @@ impl<'text> Signature<'text> {
 /// borrowed from `_owner`.
 ///
 /// Safety: if `ptr` is non-null, it must point to a null-terminated C
-/// string that is safe to access.
+/// string that is safe to access for at least as long as the lifetime of
+/// `_owner`.
 unsafe fn char_ptr_to_str<T>(_owner: &T, ptr: *const c_char) -> Option<&str> {
     if ptr.is_null() {
         return None;

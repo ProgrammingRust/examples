@@ -2,7 +2,7 @@
 name = "git-toy"
 version = "0.1.0"
 authors = ["You <you@example.com>"]
-build = "build.rs"
+edition = "2018"
 
 [dependencies]
-libc = "0.2.23"
+libc = "0.2"
