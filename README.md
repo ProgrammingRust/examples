@@ -1,7 +1,7 @@
 # Code Examples for _Programming Rust_
 
-This repository contains complete code for the larger example programs
-from the book “Programming Rust”, by Jim Blandy and Jason Orendorff.
+This repository contains complete code for the larger example programs from the
+book “Programming Rust”, by Jim Blandy, Jason Orendorff, and Leonora Tindall.
 
 Each subdirectory is a distinct Rust project, with its own Cargo.toml file. You
 should be able to enter each directory and use `cargo build` and `cargo test`.
