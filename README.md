@@ -101,6 +101,25 @@ terms of the MIT license. See [LICENSE-MIT](LICENSE-MIT) for details.
 
 ## Chapter 20: Asynchronous Programming
 
+- The `cheapo-request` directory uses `async-std`'s asynchronous networking
+  functions and the `block_on` executor function to make a bare-bones HTTP
+  request.
+
+- The `many-requests` directory makes several requests concurrently on a single
+  thread, using `async-std`'s `spawn_local`.
+
+- The `many-requests-surf` directory does the same using `surf`, an open-source
+  asynchronous HTTP client library available from _crates.io_ that does a
+  much better job with HTTP than our chapter's `cheapo_request` function.
+
+- The `spawn-blocking` directory includes the definition of `spawn_blocking`
+  presented in the section "Primitive Futures and Executors: When Is A Future
+  Worth Polling Again?". The crate also includes some tests to exercise the
+  function.
+
+- The `block-on` directory includes the implementation of a simple `block_on`
+  executor, which demonstrates polling and waiting for wakers to be invoked.
+
 - The chat client and server used as an extended example are in their own
   repository, at `https://github.com/ProgrammingRust/async-chat`.
 
