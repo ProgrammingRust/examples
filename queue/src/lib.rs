@@ -1,4 +1,7 @@
-/// A last-in, first-out queue of characters.
+#![warn(rust_2018_idioms)]
+#![allow(elided_lifetimes_in_paths)]
+
+/// A first-in, first-out queue of characters.
 pub struct Queue {
     older: Vec<char>,   // older elements, eldest last.
     younger: Vec<char>  // younger elements, youngest last.
