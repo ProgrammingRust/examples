@@ -1,0 +1,11 @@
+[package]
+name = "many-requests"
+version = "0.1.0"
+authors = ["You <you@example.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+# We need the 'unstable' feature to get 'spawn_local'.
+async-std = { version = "1.7", features = ["unstable"] }
