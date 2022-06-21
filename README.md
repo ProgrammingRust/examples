@@ -16,10 +16,14 @@ terms of the MIT license. See [LICENSE-MIT](LICENSE-MIT) for details.
   common denominator of a list of numbers.
 
 - The `actix-gcd` directory holds the code for the simple web service,
-  implemented using the [`actix-web`] framework, that computes greatest common
-  denominators.
+  implemented using the [`actix-web`] framework, that computes
+  greatest common denominators.
+  
+  Note that the code shown here has been updated to use a newer
+  version of `actix-web` than shown in the book, to address security
+  holes in earlier versions of the framework.
 
-- The Mandelbrot plotting program has its own repository, at
+- the Mandelbrot plotting program has its own repository, at
   `https://github.com/ProgrammingRust/mandelbrot`. This repository contains
   several branches, each showing a different implementation strategy. The
   `single-threaded` branch holds the code for the single-threaded version, and
