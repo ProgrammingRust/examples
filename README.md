@@ -144,7 +144,7 @@ terms of the MIT license. See [LICENSE-MIT](LICENSE-MIT) for details.
   Pointers” section to illustrate pointer arithmetic and `std::ptr::read` and
   `std::ptr::write`.
 
-## Chapter 22: Foreign Functions
+## Chapter 23: Foreign Functions
 
 - The `libgit2-rs` and `libgit2-rs-safe` directories contain the two versions of
   the program that uses Rust's foreign function interface to call functions from
